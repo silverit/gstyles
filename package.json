@@ -1,0 +1,24 @@
+{
+  "name": "gstyles",
+  "version": "1.0.0",
+  "description": "styling in react native",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/silverit/gstyles.git"
+  },
+  "keywords": [
+    "React",
+    "Native",
+    "Styling"
+  ],
+  "author": "Phuong Vo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silverit/gstyles/issues"
+  },
+  "homepage": "https://github.com/silverit/gstyles#readme"
+}
