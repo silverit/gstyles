@@ -2,23 +2,36 @@
   "name": "gstyles",
   "version": "1.0.0",
   "description": "styling in react native",
-  "main": "index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "npm run test"
+    "build": "tsup"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/silverit/gstyles.git"
+    "url": "https://github.com/silverit/gstyles"
   },
   "keywords": [
-    "React",
-    "Native",
-    "Styling"
+    "React Native",
+    "Styling",
+    "StyleSheet"
   ],
   "author": "Phuong Vo",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/silverit/gstyles/issues"
   },
-  "homepage": "https://github.com/silverit/gstyles#readme"
+  "homepage": "https://github.com/silverit/gstyles#readme",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-native": "^0.74.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.4",
+    "@types/react": "^18.3.3",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
 }
