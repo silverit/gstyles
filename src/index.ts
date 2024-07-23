@@ -54,7 +54,7 @@ interface GStyles extends IZIndex {
   icons: (props: IconProps) => React.JSX.Element;
   shadows: IShadows;
   op: (color: string, op: number) => string;
-  opacity: (style: object, op: number) => any;
+  opacity: (style: SS.NamedStyles<any>, op: number) => any;
   SS: typeof SS;
   size: (val: number) => number;
   width: Record<string, object>;
@@ -103,6 +103,7 @@ gstyles = {
   minHeight: {},
   SS,
 };
+
 const applyFontWeight = (allTexts: any) => {
   return mapObject(allTexts, (text, key) => {
     let result = { ...text };
@@ -128,199 +129,216 @@ const applySize = (sizes: object) =>
   mapObject(sizes, (size: number) => {
     return [sizeUtils.normalize(size)];
   });
-
-const makeStyles = () => {
-  Object.assign(gstyles, {
-    // Layouts
-    root: SS.create(root),
-    row: SS.create(row),
-    col: SS.create(col),
-    positions: SS.create(positions),
-    ...SS.create(mapObject(zIndex, (item) => [item])),
-
-    // Sizes
-    sizes: {
-      ...SS.create(sizes),
-      ...sizeUtils,
-    },
-
-    size: sizeUtils.normalize,
-
-    // Colors
-    colors: SS.create(mapObject(colors, (item) => [{ color: item }])),
-    bgColors: SS.create(
-      mapObject(colors, (item) => [{ backgroundColor: item }])
-    ),
-    borderColors: SS.create(
-      mapObject(colors, (item) => [{ borderColor: item }])
-    ),
-
-    // Typography
-    texts: SS.create({
-      // Regular
-      ...mapObject(applyFontSize(texts), (item) => [
-        {
-          ...item,
-          fontFamily: get(listFontFace, "regular"),
-        },
-      ]),
-      ...mapObject(applyFontSize(texts), (item, key) => [
-        {
-          ...item,
-          fontFamily: get(listFontFace, "medium"),
-        },
-        `${key}_m`,
-      ]),
-      ...mapObject(applyFontSize(texts), (item, key) => [
-        {
-          ...item,
-          fontFamily: get(listFontFace, "semibold"),
-        },
-        `${key}_b`,
-      ]),
-    }),
-
-    fonts: SS.create(
-      mapObject(applyFontWeight(fonts), (item) => {
-        return [item];
-      })
-    ),
-
-    // Spacing
-    paddings: {
-      ...SS.create(mapObject(applySize(paddings), (val) => [{ padding: val }])),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingHorizontal: val },
-          `x_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingVertical: val },
-          `y_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingLeft: val },
-          `l_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingRight: val },
-          `r_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingTop: val },
-          `t_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(paddings), (val, key) => [
-          { paddingBottom: val },
-          `b_${key}`,
-        ])
-      ),
-    },
-    margins: {
-      ...SS.create(mapObject(applySize(margins), (val) => [{ margin: val }])),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginHorizontal: val },
-          `x_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginVertical: val },
-          `y_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginLeft: val },
-          `l_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginRight: val },
-          `r_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginTop: val },
-          `t_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(applySize(margins), (val, key) => [
-          { marginBottom: val },
-          `b_${key}`,
-        ])
-      ),
-    },
-    gaps: SS.create(mapObject(spacings, (val) => [{ gap: val }])),
-    // Borders
-    radius: SS.create(radius),
-    rounds: Object.assign(
-      {},
-      ...[
-        ["", ["borderRadius"]],
-        ["t", ["borderTopLeftRadius", "borderTopRightRadius"]],
-        ["tl", ["borderTopLeftRadius"]],
-        ["tr", ["borderTopRightRadius"]],
-        ["b", ["borderBottomLeftRadius", "borderBottomRightRadius"]],
-        ["bl", ["borderBottomLeftRadius"]],
-        ["br", ["borderBottomRightRadius"]],
-        ["l", ["borderTopLeftRadius", "borderBottomLeftRadius"]],
-        ["r", ["borderTopRightRadius", "borderBottomRightRadius"]],
-      ].map(([suf, atts]: any) =>
-        mapObject(applySize(rounds), (val, key) => [
-          SS.create(mapObject(atts, (att) => [val, `${att}`])),
-          `${compact([suf, key]).join("_")}`,
-        ])
-      )
-    ),
-    borders: {
-      ...SS.create(mapObject(borders, (val) => [{ borderWidth: val }])),
-      ...SS.create(
-        mapObject(borders, (val, key) => [
-          { borderBottomWidth: val },
-          `b_${key}`,
-        ])
-      ),
-      ...SS.create(
-        mapObject(borders, (val, key) => [{ borderTopWidth: val }, `t_${key}`])
-      ),
-      ...SS.create(
-        mapObject(borders, (val, key) => [{ borderLeftWidth: val }, `l_${key}`])
-      ),
-      ...SS.create(
-        mapObject(borders, (val, key) => [
-          { borderRightWidth: val },
-          `r_${key}`,
-        ])
-      ),
-    },
-    // Shadows
-    shadows: SS.create(shadows),
-
-    // Opacity
-    opacity(style: SS.NamedStyles<any>, op: number) {
-      return mapObject(style, (val: any) => [opacity(val, op)]);
-    },
-    op: opacity,
-    ...SS.create(mapObject(sizeWH, (item) => [item])),
-
-    create: SS.create,
-  });
+const apllyFonts = (fonts: IFonts): any => {
+  return SS.create(
+    mapObject(applyFontWeight(fonts), (item) => {
+      return [item];
+    })
+  );
 };
-makeStyles();
+const applyText = (texts: ITexts): any => {
+  return {
+    ...mapObject(applyFontSize(texts), (item) => [
+      {
+        ...item,
+        fontFamily: get(listFontFace, "regular"),
+      },
+    ]),
+    ...mapObject(applyFontSize(texts), (item, key) => [
+      {
+        ...item,
+        fontFamily: get(listFontFace, "medium"),
+      },
+      `${key}_m`,
+    ]),
+    ...mapObject(applyFontSize(texts), (item, key) => [
+      {
+        ...item,
+        fontFamily: get(listFontFace, "semibold"),
+      },
+      `${key}_b`,
+    ]),
+  };
+};
+const makeStyles = (config: any = {}) => {
+  const {
+    root: cRoot,
+    row: cRow,
+    col: cCol,
+    zIndex: cZIndex,
+    positions: cPositions,
+  } = config;
+  gstyles.root = SS.create(root);
+  gstyles.row = SS.create(row);
+  gstyles.col = SS.create(col);
+  gstyles.positions = SS.create(positions);
+
+  const zIndexStyles: { [key: string]: any } = mapObject(zIndex, (item) => [
+    item,
+  ]);
+  Object.keys(zIndexStyles).forEach((key) => {
+    gstyles[key] = SS.create(zIndexStyles[key]);
+  });
+
+  // Sizes
+  gstyles.sizes = {
+    ...SS.create(sizes),
+    ...sizeUtils,
+  };
+  gstyles.size = sizeUtils.normalize;
+
+  // Colors
+  gstyles.colors = SS.create(mapObject(colors, (item) => [{ color: item }]));
+  gstyles.bgColors = SS.create(
+    mapObject(colors, (item) => [{ backgroundColor: item }])
+  );
+  gstyles.borderColors = SS.create(
+    mapObject(colors, (item) => [{ borderColor: item }])
+  );
+  // Typography
+  gstyles.texts = applyText(texts);
+  gstyles.fonts = apllyFonts(fonts);
+  // Spacing
+  gstyles.paddings = {
+    ...SS.create(mapObject(applySize(paddings), (val) => [{ padding: val }])),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingHorizontal: val },
+        `x_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingVertical: val },
+        `y_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingLeft: val },
+        `l_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingRight: val },
+        `r_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingTop: val },
+        `t_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(paddings), (val, key) => [
+        { paddingBottom: val },
+        `b_${key}`,
+      ])
+    ),
+  };
+  gstyles.margins = {
+    ...SS.create(mapObject(applySize(margins), (val) => [{ margin: val }])),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginHorizontal: val },
+        `x_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginVertical: val },
+        `y_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginLeft: val },
+        `l_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginRight: val },
+        `r_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginTop: val },
+        `t_${key}`,
+      ])
+    ),
+    ...SS.create(
+      mapObject(applySize(margins), (val, key) => [
+        { marginBottom: val },
+        `b_${key}`,
+      ])
+    ),
+  };
+  gstyles.gaps = SS.create(mapObject(spacings, (val) => [{ gap: val }]));
+  // Borders
+  gstyles.radius = SS.create(radius);
+  gstyles.rounds = Object.assign(
+    {},
+    ...[
+      ["", ["borderRadius"]],
+      ["t", ["borderTopLeftRadius", "borderTopRightRadius"]],
+      ["tl", ["borderTopLeftRadius"]],
+      ["tr", ["borderTopRightRadius"]],
+      ["b", ["borderBottomLeftRadius", "borderBottomRightRadius"]],
+      ["bl", ["borderBottomLeftRadius"]],
+      ["br", ["borderBottomRightRadius"]],
+      ["l", ["borderTopLeftRadius", "borderBottomLeftRadius"]],
+      ["r", ["borderTopRightRadius", "borderBottomRightRadius"]],
+    ].map(([suf, atts]: any) =>
+      mapObject(applySize(rounds), (val, key) => [
+        SS.create(mapObject(atts, (att) => [val, `${att}`])),
+        `${compact([suf, key]).join("_")}`,
+      ])
+    )
+  );
+  gstyles.borders = {
+    ...SS.create(
+      mapObject(borders, (val) => [
+        {
+          borderTopWidth: val,
+          borderRightWidth: val,
+          borderBottomWidth: val,
+          borderLeftWidth: val,
+        },
+      ])
+    ),
+    ...SS.create(
+      mapObject(borders, (val, key) => [{ borderBottomWidth: val }, `b_${key}`])
+    ),
+    ...SS.create(
+      mapObject(borders, (val, key) => [{ borderTopWidth: val }, `t_${key}`])
+    ),
+    ...SS.create(
+      mapObject(borders, (val, key) => [{ borderLeftWidth: val }, `l_${key}`])
+    ),
+    ...SS.create(
+      mapObject(borders, (val, key) => [{ borderRightWidth: val }, `r_${key}`])
+    ),
+  };
+  // Shadows
+  gstyles.shadows = SS.create(shadows);
+  // Opacity
+  gstyles.opacity = function (style: SS.NamedStyles<any>, op: number) {
+    return mapObject(style, (val: any) => [opacity(val, op)]);
+  };
+  gstyles.op = opacity;
+  // sizeWH
+  const sizeWHStyles: { [key: string]: any } = mapObject(sizeWH, (item) => [
+    item,
+  ]);
+  Object.keys(sizeWHStyles).forEach((key) => {
+    gstyles[key] = SS.create(sizeWHStyles[key]);
+  });
+  gstyles.create = SS.create;
+};
+makeStyles({});
 export { colors };
 export default gstyles;
