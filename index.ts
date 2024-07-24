@@ -63,6 +63,9 @@ interface GStyles extends IZIndex {
   minHeight: Record<string, object>;
   [key: string]: any;
 }
+
+const version = 111;
+
 let gstyles: GStyles;
 gstyles = {
   root,
