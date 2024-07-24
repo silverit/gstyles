@@ -64,7 +64,7 @@ interface GStyles extends IZIndex {
   [key: string]: any;
 }
 
-const version = 111;
+const version = 112;
 
 let gstyles: GStyles;
 gstyles = {
