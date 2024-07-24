@@ -1,5 +1,10 @@
-import { mapValues, startsWith } from "lodash";
+import { isString, mapValues, startsWith } from "lodash";
 import type { StyleSheet as SS } from "react-native";
+export { isNumber, isObject, isString, get, isEmpty } from "lodash";
+export const replaceAll = (str: string = "", find: string, replace: string) => {
+  if (!isString(str)) return "";
+  return str.split(find).join(replace);
+};
 
 export const mapObject = (
   obj: object | string[],
