@@ -13,6 +13,6 @@
     "noEmit": true,
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["styleguide", "config.ts", "fonts.ts", "index.ts", "utils.ts"],
   "exclude": ["node_modules"]
 }
