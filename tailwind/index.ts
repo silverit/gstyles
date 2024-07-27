@@ -1,3 +1,6 @@
+import colors from "../styleguide/colors.web";
+import { mapObject } from "../utils";
+import { spacings } from "../styleguide/spacings";
 const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,,mdx}",
@@ -13,9 +16,11 @@ const config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      colors: require("../styleguide/colors.web"),
+      colors: colors,
+
       //   fontSize: require("../styleguide/fontSize"),
       //   borderRadius: require("../styleguide/borderRadius"),
+      spacing: mapObject(spacings, (val) => [`${val}px`]),
       keyframes: {
         dropdown: {
           "0%": {

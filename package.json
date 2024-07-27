@@ -1,6 +1,6 @@
 {
   "name": "gstyles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Styling for React/React Native Project",
   "main": "./dist/index.web.js",
   "browser": ".dist/index.web.js",
