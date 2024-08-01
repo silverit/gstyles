@@ -5,6 +5,8 @@ export interface IRoot {
   wrap: object;
   noWrap: object;
   displayNone: object;
+  itemsCenter: object;
+  justifyCenter: object;
 }
 export const root: SS.NamedStyles<IRoot> = {
   flex1: {
@@ -21,6 +23,12 @@ export const root: SS.NamedStyles<IRoot> = {
   },
   displayNone: {
     display: "none",
+  },
+  itemsCenter: {
+    alignItems: "center",
+  },
+  justifyCenter: {
+    justifyContent: "center",
   },
 };
 export interface IRow {

@@ -107,7 +107,7 @@ gstyles = {
   SS,
 };
 
-const applyFontWeight = (allTexts: any) => {
+const applyFontWeight = (allTexts: any, listFontFace: any) => {
   return mapObject(allTexts, (text, key) => {
     let result = { ...text };
     if (has(listFontFace, key)) result.fontFamily = get(listFontFace, key);
@@ -132,9 +132,9 @@ const applySize = (sizes: object) =>
   mapObject(sizes, (size: number) => {
     return [sizeUtils.normalize(size)];
   });
-const apllyFonts = (fonts: IFonts): any => {
+const apllyFonts = (fonts: IFonts, listFontFace: {}): any => {
   return SS.create(
-    mapObject(applyFontWeight(fonts), (item) => {
+    mapObject(applyFontWeight(fonts, listFontFace), (item) => {
       return [item];
     })
   );
@@ -163,22 +163,32 @@ const applyText = (texts: ITexts): any => {
     ]),
   };
 };
-const makeStyles = (config: any = {}) => {
+let gColors = colors;
+export const makeStyles = (config: any = {}) => {
   const {
-    root: cRoot,
-    row: cRow,
-    col: cCol,
-    zIndex: cZIndex,
     positions: cPositions,
+    colors: cColors,
+    texts: cTexts,
+    fonts: cFonts,
+    fontfaces: cFontfaces,
+    shadows: cShadows,
+    borders: cBorders,
   } = config;
+  const rootStyles: { [key: string]: any } = mapObject(root, (item) => [item]);
+
+  Object.keys(rootStyles).forEach((key) => {
+    gstyles[key] = SS.create(rootStyles[key]);
+  });
+
   gstyles.root = SS.create(root);
   gstyles.row = SS.create(row);
   gstyles.col = SS.create(col);
-  gstyles.positions = SS.create(positions);
+  gstyles.positions = SS.create({ ...positions, cPositions });
 
   const zIndexStyles: { [key: string]: any } = mapObject(zIndex, (item) => [
     item,
   ]);
+
   Object.keys(zIndexStyles).forEach((key) => {
     gstyles[key] = SS.create(zIndexStyles[key]);
   });
@@ -191,16 +201,20 @@ const makeStyles = (config: any = {}) => {
   gstyles.size = sizeUtils.normalize;
 
   // Colors
-  gstyles.colors = SS.create(mapObject(colors, (item) => [{ color: item }]));
+  gColors = { ...gColors, ...cColors };
+  gstyles.colors = SS.create(mapObject(gColors, (item) => [{ color: item }]));
   gstyles.bgColors = SS.create(
-    mapObject(colors, (item) => [{ backgroundColor: item }])
+    mapObject(gColors, (item) => [{ backgroundColor: item }])
   );
   gstyles.borderColors = SS.create(
-    mapObject(colors, (item) => [{ borderColor: item }])
+    mapObject(gColors, (item) => [{ borderColor: item }])
   );
   // Typography
-  gstyles.texts = applyText(texts);
-  gstyles.fonts = apllyFonts(fonts);
+  gstyles.texts = applyText({ ...texts, ...cTexts });
+  gstyles.fonts = apllyFonts(
+    { ...fonts, ...cFonts },
+    { ...listFontFace, ...cFontfaces }
+  );
   // Spacing
   gstyles.paddings = {
     ...SS.create(mapObject(applySize(paddings), (val) => [{ padding: val }])),
@@ -327,7 +341,7 @@ const makeStyles = (config: any = {}) => {
     ),
   };
   // Shadows
-  gstyles.shadows = SS.create(shadows);
+  gstyles.shadows = SS.create({ ...shadows, ...cShadows });
   // Opacity
   gstyles.opacity = function (style: SS.NamedStyles<any>, op: number) {
     return mapObject(style, (val: any) => [opacity(val, op)]);
@@ -343,5 +357,5 @@ const makeStyles = (config: any = {}) => {
   gstyles.create = SS.create;
 };
 makeStyles({});
-export { colors };
+export { gColors as colors };
 export default gstyles;
